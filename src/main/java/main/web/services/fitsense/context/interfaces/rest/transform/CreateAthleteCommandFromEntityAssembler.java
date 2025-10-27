@@ -14,6 +14,13 @@ public class CreateAthleteCommandFromEntityAssembler {
         return new CreateAthleteCommand(
                 resource.fullname(),
                 resource.phone(),
+                resource.gender(),
+                resource.age(),
+                resource.weight(),
+                resource.height(),
+                resource.goal(),
+                resource.activityLevel(),
+                resource.equipment(),
                 resource.userId()
         );
     }

@@ -1,6 +1,5 @@
 package main.web.services.fitsense.context.interfaces.rest.transform;
 
-
 import main.web.services.fitsense.context.domain.model.aggregates.Athlete;
 import main.web.services.fitsense.context.interfaces.rest.resources.AthleteResource;
 
@@ -16,6 +15,13 @@ public class AthleteResourceFromEntityAssembler {
                 entity.getId(),
                 entity.getFullname().fullname(),
                 entity.getPhone().phone(),
+                entity.getGender().gender(),
+                entity.getAge().age(),
+                entity.getWeight().weight(),
+                entity.getHeight().height(),
+                entity.getGoal().goal(),
+                entity.getActivityLevel().activityLevel(),
+                entity.getEquipment().equipment(),
                 entity.getUser().getId()
         );
     }

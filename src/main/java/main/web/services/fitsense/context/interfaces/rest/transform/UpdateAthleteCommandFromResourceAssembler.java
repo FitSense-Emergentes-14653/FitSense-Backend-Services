@@ -1,6 +1,5 @@
 package main.web.services.fitsense.context.interfaces.rest.transform;
 
-
 import main.web.services.fitsense.context.domain.model.commands.UpdateAthleteCommand;
 import main.web.services.fitsense.context.interfaces.rest.resources.UpdateAthleteResource;
 
@@ -16,6 +15,13 @@ public class UpdateAthleteCommandFromResourceAssembler {
                 AthleteId,
                 resource.fullname(),
                 resource.phone(),
+                resource.gender(),
+                resource.age(),
+                resource.weight(),
+                resource.height(),
+                resource.goal(),
+                resource.activityLevel(),
+                resource.equipment(),
                 resource.userId()
         );
     }

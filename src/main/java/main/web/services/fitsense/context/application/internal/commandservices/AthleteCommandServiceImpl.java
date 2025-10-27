@@ -50,14 +50,25 @@ public class AthleteCommandServiceImpl implements AthleteCommandService {
         if (existingAthlete.isEmpty()) {
             throw new IllegalArgumentException("Athlete does not exist");
         }
-        var Athlete = existingAthlete.get();
-        Athlete.updateAthlete(command.fullname(),command.phone());
+        var athlete = existingAthlete.get();
+        athlete.updateAthlete(
+                command.fullname(),
+                command.phone(),
+                command.gender(),
+                command.age(),
+                command.weight(),
+                command.height(),
+                command.goal(),
+                command.activityLevel(),
+                command.equipment()
+        );
+
         try {
-            AthleteRepository.save(Athlete);
+            AthleteRepository.save(athlete);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while updating Athlete: " + e.getMessage());
         }
-        return Athlete.getId();
+        return athlete.getId();
     }
 
     @Override

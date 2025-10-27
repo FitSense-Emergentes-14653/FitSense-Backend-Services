@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import main.web.services.fitsense.context.domain.model.commands.CreateAthleteCommand;
-import main.web.services.fitsense.context.domain.valueobjects.Fullname;
-import main.web.services.fitsense.context.domain.valueobjects.Phone;
+import main.web.services.fitsense.context.domain.valueobjects.*;
 import main.web.services.fitsense.iam.domain.model.aggregates.User;
 import main.web.services.fitsense.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
+import java.util.List;
+
 /**
  * Athlete aggregate root.
- *
  * @author Fiorella Jarama Peñaloza - u202120418
  * @version 1.0
  */
@@ -19,6 +19,7 @@ import main.web.services.fitsense.shared.domain.model.aggregates.AuditableAbstra
 @Entity
 @Setter
 public class Athlete extends AuditableAbstractAggregateRoot<Athlete> {
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -31,19 +32,65 @@ public class Athlete extends AuditableAbstractAggregateRoot<Athlete> {
     @Embedded
     private Phone phone;
 
+    @Setter
+    @Embedded
+    private Gender gender;
+
+    @Setter
+    @Embedded
+    private Age age;
+
+    @Setter
+    @Embedded
+    private Weight weight;
+
+    @Setter
+    @Embedded
+    private Height height;
+
+    @Setter
+    @Embedded
+    private Goal goal;
+
+    @Setter
+    @Embedded
+    private ActivityLevel activityLevel;
+
+    @Setter
+    @Embedded
+    private Equipment equipment;
+
 
     public Athlete(CreateAthleteCommand command, User user) {
         this.fullname = new Fullname(command.fullname());
         this.phone = new Phone(command.phone());
         this.user = user;
-
+        this.gender = new Gender(command.gender());
+        this.age = new Age(command.age());
+        this.weight = new Weight(command.weight());
+        this.height = new Height(command.height());
+        this.goal = new Goal(command.goal());
+        this.activityLevel = new ActivityLevel(command.activityLevel());
+        this.equipment = new Equipment(command.equipment());
     }
 
     public Athlete() {}
 
-    public void updateAthlete(String fullname, String phone) {
+    public void updateAthlete(String fullname, String phone,
+                              String gender, Integer age,
+                              Double weight,
+                              Double height, String goal,
+                              String activityLevel, List<String> equipment) {
+
         this.fullname = new Fullname(fullname);
         this.phone = new Phone(phone);
+        this.gender = new Gender(gender);
+        this.age = new Age(age);
+        this.weight = new Weight(weight);
+        this.height = new Height(height);
+        this.goal = new Goal(goal);
+        this.activityLevel = new ActivityLevel(activityLevel);
+        this.equipment = new Equipment(equipment);
     }
 
     public Long getUserId() {

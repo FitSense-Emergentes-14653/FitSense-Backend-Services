@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  */
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping(value="/api/v1/Athletes", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value="/api/v1/athletes", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "Athlete", description = "Athlete Management Endpoints")
 public class AthleteController {
 

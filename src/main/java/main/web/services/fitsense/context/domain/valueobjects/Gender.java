@@ -10,8 +10,11 @@ public record Gender(String gender) {
             throw new IllegalArgumentException("Gender cannot be null or empty");
         }
         String normalized = gender.trim().toLowerCase();
-        if (!normalized.equals("masculino") && !normalized.equals("femenino")) {
-            throw new IllegalArgumentException("Gender must be either 'Masculino' or 'Femenino'");
+        if (!normalized.equals("masculino") && !normalized.equals("femenino")
+                && !normalized.equals("male") && !normalized.equals("female")) {
+            throw new IllegalArgumentException(
+                    "Gender must be either 'Masculino', 'Femenino', 'Male' or 'Female'"
+            );
         }
     }
 }

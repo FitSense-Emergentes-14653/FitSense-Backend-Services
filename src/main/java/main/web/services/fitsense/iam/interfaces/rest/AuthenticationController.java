@@ -1,10 +1,7 @@
 package main.web.services.fitsense.iam.interfaces.rest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import main.web.services.fitsense.iam.domain.services.UserCommandService;
-import main.web.services.fitsense.iam.interfaces.rest.resources.AuthenticatedUserResource;
-import main.web.services.fitsense.iam.interfaces.rest.resources.SignInResource;
-import main.web.services.fitsense.iam.interfaces.rest.resources.SignUpResource;
-import main.web.services.fitsense.iam.interfaces.rest.resources.UserResource;
+import main.web.services.fitsense.iam.interfaces.rest.resources.*;
 import main.web.services.fitsense.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
 import main.web.services.fitsense.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
 import main.web.services.fitsense.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
@@ -61,4 +58,23 @@ public class AuthenticationController {
         var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
         return new ResponseEntity<>(userResource, HttpStatus.CREATED);
     }
+
+    /**
+     * Handles password reset requests (simple flow).
+     * Validates if the email exists and updates the password.
+     *
+     * @param resetPasswordResource the reset password request body.
+     * @return confirmation message or error.
+     */
+    @PutMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordResource resetPasswordResource) {
+        boolean updated = userCommandService.resetPassword(resetPasswordResource.email(), resetPasswordResource.newPassword());
+        if (!updated) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"error\": \"El correo no está registrado.\"}");
+        }
+        return ResponseEntity.ok("{\"message\": \"Contraseña restablecida correctamente.\"}");
+    }
+
+
 }

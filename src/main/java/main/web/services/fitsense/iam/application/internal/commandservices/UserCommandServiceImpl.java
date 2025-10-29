@@ -73,4 +73,18 @@ public class UserCommandServiceImpl implements UserCommandService {
         userRepository.save(user);
         return userRepository.findUserByEmailIs(command.email());
     }
+
+    @Override
+    public boolean resetPassword(String email, String newPassword) {
+        var userOpt = userRepository.findUserByEmailIs(email);
+        if (userOpt.isEmpty()) {
+            return false;
+        }
+
+        var user = userOpt.get();
+        user.setPassword(hashingService.encode(newPassword));
+        userRepository.save(user);
+        return true;
+    }
+
 }

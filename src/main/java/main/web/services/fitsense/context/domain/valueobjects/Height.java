@@ -9,8 +9,8 @@ public record Height(Double height) {
         if (height == null || height <= 0) {
             throw new IllegalArgumentException("Height must be greater than zero");
         }
-        if (height < 100 || height > 250) {
-            throw new IllegalArgumentException("Height must be between 100 and 250 cm");
+        if (height < 50 || height > 250) {
+            throw new IllegalArgumentException("Height must be between 50 and 250 cm");
         }
     }
 }

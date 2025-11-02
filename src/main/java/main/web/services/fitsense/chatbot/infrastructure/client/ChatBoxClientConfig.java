@@ -12,10 +12,10 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class ChatBoxClientConfig {
 
-    @Value("${chatbox.connectTimeoutMs:2000}")
+    @Value("${chatbox.connectTimeoutMs:50000}")
     private int connectTimeout;
 
-    @Value("${chatbox.readTimeoutMs:15000}")
+    @Value("${chatbox.readTimeoutMs:60000}")
     private int readTimeout;
 
     @Bean(name = "chatBoxRestTemplate")

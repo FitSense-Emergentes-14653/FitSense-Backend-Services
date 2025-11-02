@@ -22,6 +22,8 @@ public class UpdateAthleteCommandFromResourceAssembler {
                 resource.goal(),
                 resource.activityLevel(),
                 resource.equipment(),
+                resource.environment(),
+                resource.frecuency(),
                 resource.userId()
         );
     }

@@ -19,6 +19,8 @@ public record CreateAthleteCommand(
         String goal,
         String activityLevel,
         List<String> equipment,
+        String environment,
+        Integer frecuency,
         Long userId
 ) {
 }

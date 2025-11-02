@@ -22,6 +22,8 @@ public class AthleteResourceFromEntityAssembler {
                 entity.getGoal().goal(),
                 entity.getActivityLevel().activityLevel(),
                 entity.getEquipment().equipment(),
+                entity.getEnvironment().environment(),
+                entity.getFrecuency().frecuency(),
                 entity.getUser().getId()
         );
     }

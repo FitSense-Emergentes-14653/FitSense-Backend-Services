@@ -60,6 +60,14 @@ public class Athlete extends AuditableAbstractAggregateRoot<Athlete> {
     @Embedded
     private Equipment equipment;
 
+    @Setter
+    @Embedded
+    private Environment environment;
+
+    @Setter
+    @Embedded
+    private Frecuency frecuency;
+
 
     public Athlete(CreateAthleteCommand command, User user) {
         this.fullname = new Fullname(command.fullname());
@@ -72,6 +80,8 @@ public class Athlete extends AuditableAbstractAggregateRoot<Athlete> {
         this.goal = new Goal(command.goal());
         this.activityLevel = new ActivityLevel(command.activityLevel());
         this.equipment = new Equipment(command.equipment());
+        this.environment = new Environment(command.environment());
+        this.frecuency = new Frecuency(command.frecuency());
     }
 
     public Athlete() {}
@@ -80,7 +90,7 @@ public class Athlete extends AuditableAbstractAggregateRoot<Athlete> {
                               String gender, Integer age,
                               Double weight,
                               Double height, String goal,
-                              String activityLevel, List<String> equipment) {
+                              String activityLevel, List<String> equipment, String environment, Integer frecuency) {
 
         this.fullname = new Fullname(fullname);
         this.phone = new Phone(phone);
@@ -91,6 +101,8 @@ public class Athlete extends AuditableAbstractAggregateRoot<Athlete> {
         this.goal = new Goal(goal);
         this.activityLevel = new ActivityLevel(activityLevel);
         this.equipment = new Equipment(equipment);
+        this.environment = new Environment(environment);
+        this.frecuency = new Frecuency(frecuency);
     }
 
     public Long getUserId() {

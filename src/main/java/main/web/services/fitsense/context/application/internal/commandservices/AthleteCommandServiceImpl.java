@@ -60,7 +60,9 @@ public class AthleteCommandServiceImpl implements AthleteCommandService {
                 command.height(),
                 command.goal(),
                 command.activityLevel(),
-                command.equipment()
+                command.equipment(),
+                command.environment(),
+                command.frecuency()
         );
 
         try {

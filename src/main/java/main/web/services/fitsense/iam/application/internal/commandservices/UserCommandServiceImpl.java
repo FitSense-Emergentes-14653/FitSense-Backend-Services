@@ -10,6 +10,8 @@ import main.web.services.fitsense.iam.infrastructure.persistence.jpa.repositorie
 import main.web.services.fitsense.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -22,6 +24,7 @@ import java.util.Optional;
  */
 @Service
 public class UserCommandServiceImpl implements UserCommandService {
+    private static final Logger logger = LoggerFactory.getLogger(UserCommandServiceImpl.class);
 
     private final UserRepository userRepository;
     private final HashingService hashingService;
@@ -47,11 +50,20 @@ public class UserCommandServiceImpl implements UserCommandService {
      */
     @Override
     public Optional<ImmutablePair<User, String>> handle(SignInCommand command) {
+        logger.debug("Attempting sign in for user: {}", command.email());
         var user = userRepository.findUserByEmailIs(command.email());
-        if (user.isEmpty())
-            throw new RuntimeException("User not found");
-        if (!hashingService.matches(command.password(), user.get().getPassword()))
-            throw new RuntimeException("Invalid password");
+
+        if (user.isEmpty()) {
+            logger.warn("Login attempt failed - User not found: {}", command.email());
+            throw new RuntimeException("El correo electrónico no está registrado");
+        }
+
+        if (!hashingService.matches(command.password(), user.get().getPassword())) {
+            logger.warn("Login attempt failed - Invalid password for user: {}", command.email());
+            throw new RuntimeException("La contraseña ingresada es incorrecta");
+        }
+
+        logger.info("User successfully logged in: {}", command.email());
         var token = tokenService.generateToken(user.get().getEmail());
         return Optional.of(ImmutablePair.of(user.get(), token));
     }

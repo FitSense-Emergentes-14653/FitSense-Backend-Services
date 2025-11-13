@@ -7,14 +7,20 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
+
 @Configuration
 public class OpenApiConfiguration {
+
     @Bean
     public OpenAPI learningPlatformOpenApi() {
-// General configuration
+
         var openApi = new OpenAPI();
+
         openApi
                 .info(new Info()
                         .title("TechSolutions FitSense Backend Services API")
@@ -25,11 +31,18 @@ public class OpenApiConfiguration {
                 .externalDocs(new ExternalDocumentation()
                         .description("TechSolutions FitSense Backend Services wiki Documentation")
                         .url("https://github.com/TechSolutions-UPC/Backend-Services/tree/main#readme"));
-        // Add security scheme
+
+        openApi.setServers(List.of(
+                new Server()
+                        .url("/")
+                        .description("Current server")
+        ));
+
+        // Security scheme
         final String securitySchemeName = "bearerAuth";
 
-        openApi.addSecurityItem(new SecurityRequirement()
-                        .addList(securitySchemeName))
+        openApi
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
@@ -37,8 +50,7 @@ public class OpenApiConfiguration {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")));
+
         return openApi;
     }
 }
-
-

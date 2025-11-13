@@ -27,7 +27,7 @@ public class ChatBoxClient {
 
     public ChatBoxClient(
             @Qualifier("chatBoxRestTemplate") RestTemplate restTemplate,
-            @Value("${chatbox.url}") String baseUrl,
+            @Value("https://chatbox-ai-production-6ead.up.railway.app") String baseUrl,
             @Value("${chatbox.apiKey:}") String apiKey) {
         this.restTemplate = restTemplate;
         this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;

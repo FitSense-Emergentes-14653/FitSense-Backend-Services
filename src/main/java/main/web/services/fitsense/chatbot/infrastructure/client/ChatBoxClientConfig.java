@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-/**
- * Configuration for ChatBox-AI HTTP client
- */
 @Configuration
 public class ChatBoxClientConfig {
 
@@ -18,8 +15,8 @@ public class ChatBoxClientConfig {
     @Value("${chatbox.readTimeoutMs:60000}")
     private int readTimeout;
 
-    @Bean(name = "chatBoxRestTemplate")
-    public RestTemplate chatBoxRestTemplate() {
+    @Bean
+    public RestTemplate restTemplate() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(connectTimeout);
         factory.setReadTimeout(readTimeout);

@@ -37,8 +37,8 @@ public class ChatBoxClient {
     /**
      * Start or resume a chat session
      */
-    @CircuitBreaker(name = "chatbox", fallbackMethod = "startSessionFallback")
-    @Retry(name = "chatbox")
+    //@CircuitBreaker(name = "chatbox", fallbackMethod = "startSessionFallback")
+    //@Retry(name = "chatbox")
     public StartSessionResponse startSession(Long userId, String sessionId) {
         log.info("Starting chat session for userId: {}", userId);
         
@@ -66,8 +66,8 @@ public class ChatBoxClient {
     /**
      * Send a message to the chatbot
      */
-    @CircuitBreaker(name = "chatbox", fallbackMethod = "sendMessageFallback")
-    @Retry(name = "chatbox")
+    //@CircuitBreaker(name = "chatbox", fallbackMethod = "sendMessageFallback")
+    //@Retry(name = "chatbox")
     public SendMessageResponse sendMessage(Long userId, String sessionId, String message, Boolean forcePlan) {
         log.info("Sending message for userId: {}, sessionId: {}", userId, sessionId);
         
@@ -95,8 +95,8 @@ public class ChatBoxClient {
     /**
      * End a chat session
      */
-    @CircuitBreaker(name = "chatbox", fallbackMethod = "endSessionFallback")
-    @Retry(name = "chatbox")
+    //@CircuitBreaker(name = "chatbox", fallbackMethod = "endSessionFallback")
+    //@Retry(name = "chatbox")
     public EndSessionResponse endSession(Long userId, String sessionId) {
         log.info("Ending chat session for userId: {}, sessionId: {}", userId, sessionId);
         
@@ -124,7 +124,7 @@ public class ChatBoxClient {
     /**
      * Check health of ChatBox-AI service
      */
-    @CircuitBreaker(name = "chatbox", fallbackMethod = "healthCheckFallback")
+    //@CircuitBreaker(name = "chatbox", fallbackMethod = "healthCheckFallback")
     public Map<String, Object> healthCheck() {
         log.info("Checking ChatBox-AI health");
         

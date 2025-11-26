@@ -9,13 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
  * Controller for hydration tracking and goal management.
  *
  * @author Fiorella Jarama Peñaloza - u202120418
- * @version 1.0
+ * @version 1.2
  */
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -32,7 +34,10 @@ public class HydrationController {
     }
 
     @PutMapping("/goal/{athleteId}")
-    public ResponseEntity<String> updateHydrationGoal(@PathVariable Long athleteId, @RequestParam Double hydrationGoal) {
+    public ResponseEntity<Map<String, Object>> updateHydrationGoal(
+            @PathVariable Long athleteId,
+            @RequestParam Double hydrationGoal) {
+
         var athlete = athleteRepository.findById(athleteId)
                 .orElseThrow(() -> new RuntimeException("Athlete not found"));
 
@@ -40,8 +45,7 @@ public class HydrationController {
                 .findAll()
                 .stream()
                 .filter(h -> h.getAthlete().getId().equals(athleteId)
-                        && h.getCreatedAt()
-                        .toInstant()
+                        && h.getCreatedAt().toInstant()
                         .atZone(java.time.ZoneId.systemDefault())
                         .toLocalDate()
                         .equals(LocalDate.now()))
@@ -59,11 +63,14 @@ public class HydrationController {
         }
 
         hydrationRepository.save(hydration);
-        return ResponseEntity.ok("Hydration goal set to " + hydrationGoal + " ml for today.");
+        return ResponseEntity.ok(buildHydrationResponse(hydration));
     }
 
     @PostMapping("/{athleteId}")
-    public ResponseEntity<?> addWater(@PathVariable Long athleteId, @RequestParam Double amount) {
+    public ResponseEntity<Map<String, Object>> addWater(
+            @PathVariable Long athleteId,
+            @RequestParam Double amount) {
+
         var athlete = athleteRepository.findById(athleteId)
                 .orElseThrow(() -> new RuntimeException("Athlete not found"));
 
@@ -71,8 +78,7 @@ public class HydrationController {
                 .findAll()
                 .stream()
                 .filter(h -> h.getAthlete().getId().equals(athleteId)
-                        && h.getCreatedAt()
-                        .toInstant()
+                        && h.getCreatedAt().toInstant()
                         .atZone(java.time.ZoneId.systemDefault())
                         .toLocalDate()
                         .equals(LocalDate.now()))
@@ -86,58 +92,47 @@ public class HydrationController {
             hydration = new Hydration();
             hydration.setAthlete(athlete);
             hydration.setQuantity(new Quantity(amount));
-            hydration.setHydrationGoal(2000.0); // meta por defecto si no se definió
+            hydration.setHydrationGoal(2000.0); // Default if not defined
         }
 
         hydrationRepository.save(hydration);
-
-        double progress = hydration.progressPercentage();
-        boolean goalReached = hydration.goalReached();
-
-        return ResponseEntity.ok(String.format(
-                "Total: %.0f ml | Goal: %.0f ml | Progress: %.1f%% | Goal reached: %s",
-                hydration.getQuantity().quantity(),
-                hydration.getHydrationGoal(),
-                progress,
-                goalReached ? "✅" : "❌"
-        ));
+        return ResponseEntity.ok(buildHydrationResponse(hydration));
     }
 
     @GetMapping("/{athleteId}")
-    public ResponseEntity<?> getTodayHydration(@PathVariable Long athleteId) {
+    public ResponseEntity<Map<String, Object>> getTodayHydration(@PathVariable Long athleteId) {
+
         Optional<Hydration> hydrationOpt = hydrationRepository
                 .findAll()
                 .stream()
                 .filter(h -> h.getAthlete().getId().equals(athleteId)
-                        && h.getCreatedAt()
-                        .toInstant()
+                        && h.getCreatedAt().toInstant()
                         .atZone(java.time.ZoneId.systemDefault())
                         .toLocalDate()
                         .equals(LocalDate.now()))
                 .findFirst();
 
         if (hydrationOpt.isEmpty()) {
-            return ResponseEntity.status(404)
-                    .body("No hydration record found for athlete " + athleteId + " today.");
+            Map<String, Object> empty = new HashMap<>();
+            empty.put("athleteId", athleteId);
+            empty.put("total", 0);
+            empty.put("hydrationGoal", 2000);
+            empty.put("progress", 0);
+            empty.put("goalReached", false);
+            return ResponseEntity.ok(empty);
         }
 
-        var hydration = hydrationOpt.get();
-
-        double total = hydration.getQuantity().quantity();
-        double goal = hydration.getHydrationGoal();
-        double progress = hydration.progressPercentage();
-        boolean goalReached = hydration.goalReached();
-
-        var response = String.format(
-                "Athlete %d → Total: %.0f ml | Goal: %.0f ml | Progress: %.1f%% | Goal reached: %s",
-                athleteId,
-                total,
-                goal,
-                progress,
-                goalReached ? "✅" : "❌"
-        );
-
-        return ResponseEntity.ok(response);
+        Hydration hydration = hydrationOpt.get();
+        return ResponseEntity.ok(buildHydrationResponse(hydration));
     }
 
+    private Map<String, Object> buildHydrationResponse(Hydration hydration) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("athleteId", hydration.getAthlete().getId());
+        map.put("total", hydration.getQuantity().quantity());
+        map.put("hydrationGoal", hydration.getHydrationGoal());
+        map.put("progress", hydration.progressPercentage());
+        map.put("goalReached", hydration.goalReached());
+        return map;
+    }
 }

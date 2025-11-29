@@ -24,17 +24,16 @@ public class Exercise extends AuditableModel {
     @Column(nullable = false, unique = true)
     private String name;
 
-    private String level;             // Beginner / Intermediate / Advanced
-    private String equipment;         // Dumbbell, Barbell, Bodyweight...
-    private String primaryMuscle;     // Ej: Chest, Legs, Core...
-    private String secondaryMuscle;   // Ej: Triceps, Shoulders...
-    private String category;          // Upper / Lower / Core / FullBody...
-    private String imageUrl;          // URL de referencia (GIF o PNG)
+    private String level;
+    private String equipment;
+    private String primaryMuscle;
+    private String secondaryMuscle;
+    private String category;
+    private String imageUrl;
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String raw;               // JSON o descripción completa del ejercicio
-
+    private String raw;
     public Exercise() {}
 
     public Exercise(String name, String level, String equipment,

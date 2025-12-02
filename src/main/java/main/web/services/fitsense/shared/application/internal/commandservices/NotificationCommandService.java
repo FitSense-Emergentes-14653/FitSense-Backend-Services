@@ -15,7 +15,7 @@ public class NotificationCommandService {
         this.notificationRepository = notificationRepository;
     }
 
-    public Notification createNotification(String userId, String title, String body) {
+    public Notification createNotification(Long userId, String title, String body) {
         Notification notification = new Notification(userId, title, body);
         return notificationRepository.save(notification);
     }
@@ -24,7 +24,7 @@ public class NotificationCommandService {
         return notificationRepository.findAllByOrderByCreatedAtDesc();
     }
 
-    public List<Notification> getNotificationsByUserId(String userId) {
+    public List<Notification> getNotificationsByUserId(Long userId) {
         return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 

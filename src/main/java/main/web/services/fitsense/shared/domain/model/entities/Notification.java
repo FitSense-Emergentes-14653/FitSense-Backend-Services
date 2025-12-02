@@ -15,7 +15,7 @@ public class Notification extends AuditableModel {
     private Long id;
 
     @Column(nullable = false)
-    private String userId;
+    private Long userId;
 
     @Column(nullable = false)
     private String title;
@@ -29,7 +29,7 @@ public class Notification extends AuditableModel {
     public Notification() {
     }
 
-    public Notification(String userId, String title, String body) {
+    public Notification(Long userId, String title, String body) {
         this.userId = userId;
         this.title = title;
         this.body = body;

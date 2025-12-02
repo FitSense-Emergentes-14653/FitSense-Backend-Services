@@ -101,6 +101,7 @@ public class WebSecurityConfiguration {
                             "/swagger-resources/**",
                             "/error",
                             "/webjars/**").permitAll()
+                    .requestMatchers("/api/notifications/**").authenticated()
                     .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authorizationRequestFilter(), UsernamePasswordAuthenticationFilter.class);

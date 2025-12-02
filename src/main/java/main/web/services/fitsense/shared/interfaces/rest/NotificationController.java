@@ -23,25 +23,15 @@ public class NotificationController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Notification>> getMyNotifications() {
-        Long userId = getCurrentUserId();
-        List<Notification> notifications = notificationCommandService.getNotificationsByUserId(userId);
-        return ResponseEntity.ok(notifications);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Notification> getNotificationById(@PathVariable Long id) {
-        Long userId = getCurrentUserId();
-        Notification notification = notificationCommandService.getNotificationById(id);
-        if (notification == null) {
-            return ResponseEntity.notFound().build();
-        }
-        // Verificar que la notificación pertenece al usuario actual
-        if (!notification.getUserId().equals(userId)) {
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Notification>> getNotificationsByUserId(@PathVariable Long userId) {
+        Long currentUserId = getCurrentUserId();
+        // Verificar que el usuario solo pueda ver sus propias notificaciones
+        if (!currentUserId.equals(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(notification);
+        List<Notification> notifications = notificationCommandService.getNotificationsByUserId(userId);
+        return ResponseEntity.ok(notifications);
     }
 
     @PostMapping
